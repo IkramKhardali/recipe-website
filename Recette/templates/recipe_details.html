@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container my-5">
+  <div class="row justify-content-center border-0 rounded-3 shadow" >
+    <div class="col-md-4">
+      <img class="card-img-top mb-4 float-left rounded-3 " src="{{ recipe.image }}" alt="My Image" id="recImg" >
+    </div>
+    <div class="col-md-8">
+      <div class="float-right" id="recipesContainer" >
+        <h1 class="text-black py-2 px-3 mb-4" id="recipeTitle">{{ recipe.title }}</h1>
+        
+        <div class="rating mb-4" >
+          {% if rating.avg_rating is not None %}
+            {% for i in "01234" %}
+              {% if i|add:'0' >= rating.avg_rating %}
+                <span class="fa fa-star Unchecked"></span>
+              {% else %}
+                <span class="fa fa-star Checked"></span>
+              {% endif %}
+            {% endfor %}
+            <span> {{rating.avg_rating}} </span>
+          {% else %}
+            <span class="fa fa-star Unchecked"></span>
+            <span class="fa fa-star Unchecked"></span>
+            <span class="fa fa-star Unchecked"></span>
+            <span class="fa fa-star Unchecked"></span>
+            <span class="fa fa-star Unchecked"></span>
+            <span> 0.0 </span>
+          {% endif %}
+              
+          </div>
+        <div class="rating mb-4" >
+            {% if user.is_authenticated %}
+              {% if not exists  %}
+                <form method="POST" action="{% url 'rate_recipe' recipe.id %}"  id="rating-form">
+                  {% csrf_token %}
+                  <div class="star-rating">
+                    <input type="radio" id="star5" name="rating" value="1" /><label for="star5" title="5 stars"></label>
+                    <input type="radio" id="star4" name="rating" value="2" /><label for="star4" title="4 stars"></label>
+                    <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="3 stars"></label>
+                    <input type="radio" id="star2" name="rating" value="4" /><label for="star2" title="2 stars"></label>
+                    <input type="radio" id="star1" name="rating" value="5" /><label for="star1" title="1 star"></label>
+                  </div>
+                  <button type="submit" class="btn custom-btn">Submit</button>
+                </form>
+                {% if messages %}
+                  <ul class="messages">
+                    {% for message in messages %}
+                      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                  </ul>
+                  {% endif %}
+                {%else %}
+                  <p>you already rated this recipe</p>
+              {% endif %}
+            {% endif %}
+          
+          </div>
+          
+          
+        </div>
+        <p class="description" >{{ recipe.intro }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="row">
+        <div class="col-md-6">
+          <h2>Ingredients:</h2>
+          <ul class="ingredients-list">
+            {% for ingredient in ingredients_list %}
+            <li class="details">{{ ingredient }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="col-md-6">
+          <h2>Instructions:</h2>
+          <ol class="instructions-list">
+            {% for step in Instructions_list %}
+            <li class="details">{{ step }}</li>
+            {% endfor %}
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container" >
+    <h2>Similar recipes</h2>
+    <div class="row" >
+      {% for rec in similar %}
+        <div class=" border-0 rounded-3 shadow" id="similarDiv" >
+          <div class="recipe-block">
+            <a class="recipeDetButton" href="{% url 'recipe_detail' pk=rec.pk %}" >
+              <img src="{{ rec.image }}" alt="{{ rec.title }}" class="img-fluid">
+              <div class="recipe-meta">
+                <span class="difficulty">{{ rec.difficulty }}</span>
+              </div>
+              <div class="recipe-details">
+                <div class="recipe-title">{{ rec.title }}</div>
+              </div>
+            </a>
+          </div>
+        </div>
+        {% if forloop.counter|divisibleby:4 %}
+          </div><div class="row">
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+<div class="comments-section" >
+  <div class="comments-list">
+    {% for comment in comments %}
+      <div class="card comment">
+        <div class="card-body">
+          <h6 class="card-subtitle mb-2 text-muted">{{ comment.owner.username }}</h6>
+          <p class="card-text">{{ comment.body }}</p>
+          <p class="card-text"><small class="text-muted">{{ comment.created }}</small></p>
+        </div>
+      </div>
+    {% empty %}
+      <p >No comments yet.</p>
+    {% endfor %}
+  </div>
+  <div class="add-comment">
+    <div class="card mb-3">
+      {% if user.is_authenticated %}
+        <div class="card-body">
+          <h5 class="card-title">Add a comment</h5>
+          <form method="POST" action="{% url 'add_comment' recipe.id %}">
+            {% csrf_token %}
+            <div class="form-group">
+              <textarea class="form-control" name="content"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary mt-2">Submit</button>
+          </form>
+        </div>
+        {% else %}
+        <div class="card-body">
+          <p id="commentNotAllowed"> you should Log in to add a comment !!! </p>
+        </div>
+        {% endif %}
+    </div>
+  </div>
+</div>
+
+{%  endblock %}
+
+

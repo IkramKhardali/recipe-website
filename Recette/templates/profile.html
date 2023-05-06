@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div id="upperDiv">
+    <h2>Profile</h2>
+    <p>Welcome, {{ user.username }}!</p>
+</div>
+
+
+    <div class="container" >
+    <div class="row" >
+        <h2>Your favourite recipes</h2>
+        {% for fav in f %}
+        <div class="border-0 rounded-3 shadow" id="cardElt" >
+            <div class="position-relative" >
+                <a class="fa fa-close position-absolute" id="removeX" href="{% url 'removeFromFavourites' pk=fav.id %}" >                  
+                </a>
+              <a id="recipeCard" href="{% url 'recipe_detail' pk=fav.recipe.pk %}">
+              <img src="{{ fav.recipe.image }}" alt="{{ fav.recipe.title }}" class="img-fluid">
+            </div>
+            <div class="recipe-meta">
+              <span class="time">{{ fav.recipe.time }}</span>
+              <span class="difficulty">{{ fav.recipe.difficulty }}</span>
+            </div>
+            <div class="recipe-details">
+              <div class="recipe-title">{{ fav.recipe.title }}</div>
+            </div>
+          </a>
+        </div>
+        {% if forloop.counter|divisibleby:4 %}
+          </div><div class="row">
+        {% endif %}
+        {% empty%}
+        <p>no recipes found</p>
+        {% endfor %}
+      
+    </div>
+  </div>
+  <div class="paginatorDiv">
+    {% for i in recipes.paginator.page_range %}  
+        {% if recipes.number == i  %}
+            <span class="btn btn-primary active">{{ i }}</span>
+        {% else %}
+            <a href="?page={{ i }}" class="btn btn-outline-primary" >{{ i }}</a>  
+        {% endif %}
+    {% endfor %}
+</div>    
+{% endblock %}

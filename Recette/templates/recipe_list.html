@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+  {% block content %}
+  {% if user.is_authenticated %}
+  <div class="container" >
+    <div class="row" >
+      {% for rec, fav in lfinal %}
+        <div class="border-0 rounded-3 shadow recCard">
+            <div class="position-relative" >
+              {%if not fav %}
+                <a class="fa fa-heart position-absolute" id="addFavHeart" href="{% url 'addToFavourites' pk=rec.id %}" >                  
+                </a>
+              {%else%}
+              <a class="fa fa-heart position-absolute" id="removeFavHeart" href="{% url 'removeFromFavouritesAcceuil' pk=rec.id  %}" >                  
+              </a>
+              {% endif %}
+              <a class="recipeDetButton" href="{% url 'recipe_detail' pk=rec.pk %}">
+              <img src="{{ rec.image }}" alt="{{ rec.title }}" class="img-fluid">
+            </div>
+            <div class="recipe-meta">
+              <span class="time">{{ rec.time }}</span>
+              <span class="difficulty">{{ rec.difficulty }}</span>
+            </div>
+            <div class="recipe-details">
+              <div class="recipe-title">{{ rec.title }}</div>
+            </div>
+          </a>
+        </div>
+        {% if forloop.counter|divisibleby:4 %}
+          </div><div class="row">
+        {% endif %}
+        {% endfor %}
+      
+    </div>
+  </div>
+</div>
+{%else%}
+  <div class="container" >
+    <div class="row" >
+      {% for rec in recipes %}
+        <div class="border-0 rounded-3 shadow recCard">
+            <div class="position-relative" >
+              <a class="recipeDetButton" href="{% url 'recipe_detail' pk=rec.pk %}">
+              <img src="{{ rec.image }}" alt="{{ rec.title }}" class="img-fluid">
+            </div>
+            <div class="recipe-meta">
+              <span class="time">{{ rec.time }}</span>
+              <span class="difficulty">{{ rec.difficulty }}</span>
+            </div>
+            <div class="recipe-details">
+              <div class="recipe-title">{{ rec.title }}</div>
+            </div>
+          </a>
+        </div>
+        {% if forloop.counter|divisibleby:4 %}
+          </div><div class="row">
+        {% endif %}
+        {% endfor %}
+      
+    </div>
+  </div>
+
+{% endif %}
+  <div class="paginatorDiv" >
+    {% if recipes.has_previous %}
+        <a href="?page={{ recipes.previous_page_number }}" class="btn btn-outline-primary">&laquo; Prev</a>
+    {% endif %}
+    {% if recipes.number > 4 %}
+        <a href="?page=1" class="btn btn-outline-primary">1</a>
+        {% if recipes.number > 5 %}
+            <span class="btn disabled">...</span>
+        {% endif %}
+    {% endif %}
+    {% for i in recipes.paginator.page_range %}  
+        {% if recipes.number == i %}
+            <span class="btn btn-primary active">{{ i }}</span>
+        {% elif i > recipes.number|add:-3 and i < recipes.number|add:3 %}
+            <a href="?page={{ i }}" class="btn btn-outline-primary" >{{ i }}</a>
+        {% endif %}
+    {% endfor %}
+    {% if recipes.number < recipes.paginator.num_pages|add:-3 %}
+        {% if recipes.number < recipes.paginator.num_pages|add:-4 %}
+            <span class="btn disabled">...</span>
+        {% endif %}
+        <a href="?page={{ recipes.paginator.num_pages }}" class="btn btn-outline-primary">{{ recipes.paginator.num_pages }}</a>
+    {% endif %}
+    {% if recipes.has_next %}
+        <a href="?page={{ recipes.next_page_number }}" class="btn btn-outline-primary">Next &raquo;</a>
+    {% endif %}
+</div>
+{% endblock  %}

@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'Recette/css/style.css' %}">
+    <title>Login Page</title>
+</head>
+<body>
+    <section class="section">
+        <div class="container">
+            <div class="box">
+                <div class="field">
+                    <div class="control">
+                        <h1 class="title is-2 has-text-centered has-text-info mt-4">Login Page</h1>
+                        <form method="post">
+                            {% csrf_token %}
+                            <label class="label">Username</label>
+                            <input type="text" class="input" name="username" placeholder="username">
+                            <label class="label">Password</label>
+                            <input type="password" class="input" name="password" placeholder="password">
+                            <div class="box has-text-centered">
+                                <input type="submit" class="button is-info is-default is-rounded is-fullwidth  mt-4 " >
+                            </div>
+                        </form> 
+                    </div>
+                </div>
+            </div>
+            <div id="choicesDiv" >
+                <a class="nav-link" href="{% url 'register' %}" style="text-align: left;">Create account</a>
+                <a class="nav-link" href="{% url 'recipe_list' %}" style="text-align: right;">Continue without logging in</a>
+              </div>
+        </div>
+    </section>
+
+</body>
+</html>
