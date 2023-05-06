@@ -78,6 +78,13 @@ Ce code définit les URLs pour une application Django, en important les vues cor
 - `removeFromFavouritesAcceuil`: permet à un utilisateur de supprimer une recette de ses favoris depuis la page d'accueil. 
 
 En outre, la configuration des médias est fournie pour permettre le stockage des fichiers média tels que les images des recettes.
+## Credits
+This web application was created by:
+
+:bust_in_silhouette: HSSINE Younes
+:bust_in_silhouette: KHARDALI Ikram
+:bust_in_silhouette: EL MANSOURI Mohamed Achraf
+The recipe data was scraped using Beautiful Soup from the website https://www.jamieoliver.com 
 ## Outils de travail :
 ### Django – BeautifulSoup – MySQL
 ## Editeur de travail :
