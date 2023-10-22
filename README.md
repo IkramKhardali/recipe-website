@@ -81,9 +81,9 @@ En outre, la configuration des médias est fournie pour permettre le stockage de
 ## Credits
 This web application was created by:
 
-:bust_in_silhouette: HSSINE Younes
+
 :bust_in_silhouette: KHARDALI Ikram
-:bust_in_silhouette: EL MANSOURI Mohamed Achraf
+
 
 #### The recipe data was scraped using Beautiful Soup from the website https://www.jamieoliver.com 
 ## Outils de travail :
